@@ -4,13 +4,15 @@ package responses
 
 // LeagueScoreboard returns all of the games for the current week
 type LeagueScoreboard struct {
-	Games      []FantasyGame `json:"games"`
-	InProgress bool          `json:"is_in_progress"`
+	SchedulePeriod          ScoringPeriodRange `json:"schedule_period"`
+	EligibleSchedulePeriods ScoringPeriodRange `json:"eligible_schedule_periods"`
+	Games                   []FantasyGame      `json:"games"`
+	InProgress              bool               `json:"is_in_progress"`
 }
 
 // FantasyGame describes a fantasy game
 type FantasyGame struct {
-	ID           int              `json:"id"`
+	ID           string           `json:"id"`
 	Away         Team             `json:"away"`
 	Home         Team             `json:"home"`
 	AwayScore    FantasyLineScore `json:"away_score"`
@@ -23,8 +25,9 @@ type FantasyGame struct {
 
 // Team describes a fantasy team
 type Team struct {
-	ID                      int              `json:"id"`
+	ID                      int32            `json:"id"`
 	Name                    string           `json:"name"`
+	Sport                   string           `json:"sport"`
 	LogoURL                 string           `json:"logo_url"`
 	OverallRecord           TeamRecord       `json:"record_overall"`
 	DivisionRecord          TeamRecord       `json:"record_division"`
@@ -50,11 +53,11 @@ type TeamRecord struct {
 
 // FantasyLineScore describes an in-progress fantasy score
 type FantasyLineScore struct {
-	YetToPlay              int              `json:"yet_to_play"`
+	YetToPlay              int32            `json:"yet_to_play"`
 	YetToPlayPositions     []string         `json:"yet_to_play_positions"`
-	InPlay                 int              `json:"in_play"`
+	InPlay                 int32            `json:"in_play"`
 	InPlayPositions        []string         `json:"in_play_positions"`
-	AlreadyPlayed          int              `json:"already_played"`
+	AlreadyPlayed          int32            `json:"already_played"`
 	AlreadyPlayedPositions []string         `json:"already_played_positions"`
 	Score                  FormattedDecimal `json:"score"`
 	ProjectedScore         FormattedDecimal `json:"projected"`
@@ -68,12 +71,31 @@ type FormattedDecimal struct {
 
 // User is the owner of a fantasy team
 type User struct {
-	ID          int    `json:"id"`
+	ID          string `json:"id"`
 	DisplayName string `json:"display_name"`
 	AvatarURL   string `json:"avatar_url"`
 	LastSeen    int64  `json:"last_seen"`
 	Initials    string `json:"initials"`
 	LastSeenISO string `json:"last_seen_iso"`
+}
+
+// ScoringPeriodRange shows a scoring period range
+type ScoringPeriodRange struct {
+	Ordinal     int32         `json:"ordinal"`
+	Low         ScoringPeriod `json:"low"`
+	High        ScoringPeriod `json:"high"`
+	ContainsNow bool          `json:"contains_now"`
+	Value       int32         `json:"value"`
+}
+
+// ScoringPeriod shows the duration of a scoring period
+type ScoringPeriod struct {
+	Duration     string `json:"duration"`
+	Ordinal      int32  `json:"ordinal"`
+	Season       int32  `json:"season"`
+	StartEpochMS string `json:"start_epoch_milli"`
+	IsNow        bool   `json:"is_now"`
+	Label        string `json:"label"`
 }
 
 // Go has weak enum support, so...
