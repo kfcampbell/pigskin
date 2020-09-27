@@ -1,9 +1,12 @@
 package fleaflicker
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/kfcampbell/pigskin/responses"
 )
 
 const apiRoot = "https://www.fleaflicker.com/api/"
@@ -22,15 +25,19 @@ func GetLeagueStandings() error {
 }
 
 // GetLeagueScoreboard returns the league scoreboard
-func GetLeagueScoreboard() error {
+func GetLeagueScoreboard() (*responses.LeagueScoreboard, error) {
+	response := &responses.LeagueScoreboard{}
 	url := apiRoot + "FetchLeagueScoreboard" + getFiltering()
 	fmt.Printf("url: %v\n", url)
-	result, err := http.Get(url)
+	res, err := http.Get(url)
 	if err != nil {
-		return err
+		return response, err
 	}
-	fmt.Printf("result: %v", result)
-	return nil
+
+	err = json.NewDecoder(res.Body).Decode(&response)
+	defer res.Body.Close()
+
+	return response, nil
 }
 
 func getFiltering() string {

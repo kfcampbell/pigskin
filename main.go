@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/kfcampbell/pigskin/clients/fleaflicker"
@@ -14,9 +15,10 @@ func main() {
 }
 
 func realMain() error {
-	err := fleaflicker.GetLeagueScoreboard()
+	res, err := fleaflicker.GetLeagueScoreboard()
 	if err != nil {
 		return err
 	}
+	fmt.Println(res)
 	return nil
 }
