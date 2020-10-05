@@ -20,7 +20,7 @@ func GetLeagueStandings() error {
 		return err
 	}
 
-	fmt.Printf("result: %v\n", result)
+	fmt.Printf("standings: %v\n", result)
 	return nil
 }
 
@@ -28,7 +28,6 @@ func GetLeagueStandings() error {
 func GetLeagueScoreboard() (*responses.LeagueScoreboard, error) {
 	response := &responses.LeagueScoreboard{}
 	url := apiRoot + "FetchLeagueScoreboard" + getFiltering()
-	fmt.Printf("url: %v\n", url)
 	res, err := http.Get(url)
 	if err != nil {
 		return response, err
@@ -36,6 +35,10 @@ func GetLeagueScoreboard() (*responses.LeagueScoreboard, error) {
 
 	err = json.NewDecoder(res.Body).Decode(&response)
 	defer res.Body.Close()
+
+	if err != nil {
+		return response, err
+	}
 
 	return response, nil
 }
