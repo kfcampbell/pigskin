@@ -1,0 +1,20 @@
+name: post-weekly
+on:
+  schedule:
+    - cron: '* * * * *' # run at UTC midnight every Tuesday
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Optional tags'  
+jobs:
+  post-weekly:
+    name: Run application
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build base container
+        run: go run main.go
+        env:
+          LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
+          GROUPME_CHAT_ID: ${{ secrets.GROUPME_CHAT_ID }}
+          GROUPME_API_KEY: ${{ secrets.GROUPME_API_KEY }}
