@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -99,4 +99,14 @@ func (s *Scorers) AddScorer(scorer Scorer) {
 		}
 	}
 	s.scorers[highestScoreIndex] = scorer
+}
+
+// GetLength returns the length of a Scorers object
+func (s *Scorers) GetLength() int {
+	return s.length
+}
+
+// GetScorers returns the slice of Scorers
+func (s *Scorers) GetScorers() []Scorer {
+	return s.scorers
 }

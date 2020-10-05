@@ -10,11 +10,10 @@ import (
 )
 
 const apiRoot = "https://www.fleaflicker.com/api/"
-const leagueID = 170474
 
 // GetLeagueStandings gets the league of
-func GetLeagueStandings() error {
-	url := apiRoot + "FetchLeagueStandings" + getFiltering()
+func GetLeagueStandings(leagueID string) error {
+	url := apiRoot + "FetchLeagueStandings" + getFiltering(leagueID)
 	result, err := http.Get(url)
 	if err != nil {
 		return err
@@ -25,9 +24,9 @@ func GetLeagueStandings() error {
 }
 
 // GetLeagueScoreboard returns the league scoreboard
-func GetLeagueScoreboard() (*responses.LeagueScoreboard, error) {
+func GetLeagueScoreboard(leagueID string) (*responses.LeagueScoreboard, error) {
 	response := &responses.LeagueScoreboard{}
-	url := apiRoot + "FetchLeagueScoreboard" + getFiltering()
+	url := apiRoot + "FetchLeagueScoreboard" + getFiltering(leagueID)
 	res, err := http.Get(url)
 	if err != nil {
 		return response, err
@@ -43,6 +42,6 @@ func GetLeagueScoreboard() (*responses.LeagueScoreboard, error) {
 	return response, nil
 }
 
-func getFiltering() string {
+func getFiltering(leagueID string) string {
 	return "?sport=NFL&season=" + fmt.Sprintf("%v", time.Now().Year()) + "&league_id=" + fmt.Sprintf("%v", leagueID)
 }

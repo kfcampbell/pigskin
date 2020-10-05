@@ -3,10 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/kfcampbell/pigskin/clients/fleaflicker"
+	"github.com/kfcampbell/pigskin/clients/groupme"
 	"github.com/kfcampbell/pigskin/responses"
+	"github.com/kfcampbell/pigskin/utils"
 )
 
 const topNScorers = 3
@@ -19,7 +22,15 @@ func main() {
 }
 
 func realMain() error {
-	scores, err := fleaflicker.GetLeagueScoreboard()
+	fleaflickerLeagueID := os.Getenv("LEAGUE_ID")
+	groupmeChatID := os.Getenv("GROUPME_CHAT_ID")
+	groupmeAPIKey := os.Getenv("GROUPME_API_KEY")
+
+	if fleaflickerLeagueID == "" || groupmeChatID == "" || groupmeAPIKey == "" {
+		return fmt.Errorf("missing either LEAGUE_ID or GROUPME_CHAT_ID or GROUPME_API_KEY")
+	}
+
+	scores, err := fleaflicker.GetLeagueScoreboard(fleaflickerLeagueID)
 	if err != nil {
 		return err
 	}
@@ -43,6 +54,14 @@ func realMain() error {
 		return err
 	}
 	fmt.Println(bottomScorers)
+
+	body := fmt.Sprintf("%v\n%v\n%v\n", biggestWin, topScorers, bottomScorers)
+	fmt.Printf("body message: \n%v", body)
+
+	err = groupme.PostMessage(body, groupmeChatID, groupmeAPIKey)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -82,14 +101,14 @@ func getBiggestWin(games []responses.FantasyGame) string {
 }
 
 func getTopScorers(games []responses.FantasyGame) (string, error) {
-	topScorers, err := NewScorers(true, topNScorers)
+	topScorers, err := utils.NewScorers(true, topNScorers)
 	if err != nil {
 		return "Error getting top scorers", fmt.Errorf("error getting top scorers: %v", err)
 	}
 
 	for i := 0; i < len(games); i++ {
-		homeScorer := GetScorer(true, games[i])
-		awayScorer := GetScorer(false, games[i])
+		homeScorer := utils.GetScorer(true, games[i])
+		awayScorer := utils.GetScorer(false, games[i])
 
 		if topScorers.ShouldAddScorer(*homeScorer) {
 			topScorers.AddScorer(*homeScorer)
@@ -100,8 +119,8 @@ func getTopScorers(games []responses.FantasyGame) (string, error) {
 	}
 
 	formatted := "Top scorers: "
-	for i := 0; i < topScorers.length; i++ {
-		formatted += fmt.Sprintf("%v (%v points), ", topScorers.scorers[i].Team.Name, topScorers.scorers[i].Score)
+	for i := 0; i < topScorers.GetLength(); i++ {
+		formatted += fmt.Sprintf("%v (%v points), ", topScorers.GetScorers()[i].Team.Name, topScorers.GetScorers()[i].Score)
 	}
 	formatted = strings.TrimSuffix(formatted, ", ")
 
@@ -109,14 +128,14 @@ func getTopScorers(games []responses.FantasyGame) (string, error) {
 }
 
 func getBottomScorers(games []responses.FantasyGame) (string, error) {
-	bottomScorers, err := NewScorers(false, topNScorers)
+	bottomScorers, err := utils.NewScorers(false, topNScorers)
 	if err != nil {
 		return "Error getting top scorers", fmt.Errorf("error getting top scorers: %v", err)
 	}
 
 	for i := 0; i < len(games); i++ {
-		homeScorer := GetScorer(true, games[i])
-		awayScorer := GetScorer(false, games[i])
+		homeScorer := utils.GetScorer(true, games[i])
+		awayScorer := utils.GetScorer(false, games[i])
 
 		if bottomScorers.ShouldAddScorer(*homeScorer) {
 			bottomScorers.AddScorer(*homeScorer)
@@ -127,8 +146,8 @@ func getBottomScorers(games []responses.FantasyGame) (string, error) {
 	}
 
 	formatted := "Bottom scorers: "
-	for i := 0; i < bottomScorers.length; i++ {
-		formatted += fmt.Sprintf("%v (%v points), ", bottomScorers.scorers[i].Team.Name, bottomScorers.scorers[i].Score)
+	for i := 0; i < bottomScorers.GetLength(); i++ {
+		formatted += fmt.Sprintf("%v (%v points), ", bottomScorers.GetScorers()[i].Team.Name, bottomScorers.GetScorers()[i].Score)
 	}
 	formatted = strings.TrimSuffix(formatted, ", ")
 
