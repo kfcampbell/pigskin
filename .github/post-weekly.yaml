@@ -2,7 +2,7 @@ name: post-weekly
 on:
   schedule:
     - cron: '* * * * *' # run at UTC midnight every Tuesday
-  workflow-dispatch:
+  workflow_dispatch:
     inputs:
       tags:
         description: 'Test scenario tags'  
