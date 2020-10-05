@@ -93,10 +93,10 @@ func getBiggestWin(games []responses.FantasyGame) string {
 		}
 	}
 	if isHomeWinning(biggestWin) > 0 {
-		return fmt.Sprintf("Biggest win: %v over %v, %v-%v (difference of %v points).",
+		return fmt.Sprintf("- **Biggest win**: _%v_ over _%v_, %v-%v (difference of %v points).",
 			biggestWin.Home.Name, biggestWin.Away.Name, biggestWin.HomeScore.Score.Value, biggestWin.AwayScore.Score.Value, difference)
 	}
-	return fmt.Sprintf("Biggest win: %v over %v, %v-%v (difference of %v points).",
+	return fmt.Sprintf("- **Biggest win**: _%v_ over _%v_, %v-%v (difference of %v points).",
 		biggestWin.Away.Name, biggestWin.Home.Name, biggestWin.AwayScore.Score.Value, biggestWin.HomeScore.Score.Value, difference)
 }
 
@@ -118,9 +118,9 @@ func getTopScorers(games []responses.FantasyGame) (string, error) {
 		}
 	}
 
-	formatted := "Top scorers: "
+	formatted := "- **Top scorers** :"
 	for i := 0; i < topScorers.GetLength(); i++ {
-		formatted += fmt.Sprintf("%v (%v points), ", topScorers.GetScorers()[i].Team.Name, topScorers.GetScorers()[i].Score)
+		formatted += fmt.Sprintf("_%v_ (%v points), ", topScorers.GetScorers()[i].Team.Name, topScorers.GetScorers()[i].Score)
 	}
 	formatted = strings.TrimSuffix(formatted, ", ")
 
@@ -145,9 +145,9 @@ func getBottomScorers(games []responses.FantasyGame) (string, error) {
 		}
 	}
 
-	formatted := "Bottom scorers: "
+	formatted := "- **Bottom scorers**: "
 	for i := 0; i < bottomScorers.GetLength(); i++ {
-		formatted += fmt.Sprintf("%v (%v points), ", bottomScorers.GetScorers()[i].Team.Name, bottomScorers.GetScorers()[i].Score)
+		formatted += fmt.Sprintf("_%v_ (%v points), ", bottomScorers.GetScorers()[i].Team.Name, bottomScorers.GetScorers()[i].Score)
 	}
 	formatted = strings.TrimSuffix(formatted, ", ")
 
