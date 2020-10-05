@@ -1,7 +1,7 @@
 name: post-weekly
 on:
   schedule:
-    - cron: '* * * * *' # run at UTC midnight every Tuesday
+    - cron: '0 0 * * 2' # run at UTC midnight every Tuesday
   workflow_dispatch:
     inputs:
       tags:
