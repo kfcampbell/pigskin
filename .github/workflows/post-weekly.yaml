@@ -1,7 +1,7 @@
 name: post-weekly
 on:
   schedule:
-    - cron: '0 0 * * 3' # run at UTC midnight every Tuesday
+    - cron: '0 5 * * 2' # run at 5:00am UTC time every tuesday, which is roughly 10pm every monday pacific
   workflow_dispatch:
     inputs:
       tags:
