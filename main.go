@@ -35,23 +35,27 @@ func realMain() error {
 		fmt.Println(score)
 	}
 
-	biggestWin := utils.GetBiggestWin(scores.Games)
-	fmt.Println(biggestWin)
+	biggestWin, difference := utils.GetBiggestWin(scores.Games)
+	formattedBiggestWin := utils.FormatBiggestWin(biggestWin, difference)
+	fmt.Println(formattedBiggestWin)
 
-	closestGame := utils.GetClosestGame(scores.Games)
-	fmt.Println(closestGame)
+	closestGame, difference := utils.GetClosestGame(scores.Games)
+	formattedClosestGame := utils.FormatClosestGame(closestGame, difference)
+	fmt.Println(formattedClosestGame)
 
 	topScorers, err := utils.GetTopScorers(scores.Games)
 	if err != nil {
 		return err
 	}
-	fmt.Println(topScorers)
+	formattedTopScorers := utils.FormatTopScorers(topScorers)
+	fmt.Println(formattedTopScorers)
 
 	bottomScorers, err := utils.GetBottomScorers(scores.Games)
 	if err != nil {
 		return err
 	}
-	fmt.Println(bottomScorers)
+	formattedBottomScorers := utils.FormatBottomScorers(bottomScorers)
+	fmt.Println(formattedBottomScorers)
 
 	body := fmt.Sprintf("%v\n%v\n%v\n", biggestWin, topScorers, bottomScorers)
 	fmt.Printf("body message: \n%v", body)
