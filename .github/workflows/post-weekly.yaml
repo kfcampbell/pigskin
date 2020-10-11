@@ -1,7 +1,8 @@
 name: post-weekly
 on:
   schedule:
-    - cron: '0 5 * * 2' # run at 5:00am UTC time every tuesday, which is roughly 10pm every monday pacific
+    # - cron: '0 5 * * 2' # run at 5:00am UTC time every tuesday, which is roughly 10pm every monday pacific
+    - cron: '0 5 * * 3' # NFL players and coaches need to stop getting the virus
   workflow_dispatch:
     inputs:
       tags:
