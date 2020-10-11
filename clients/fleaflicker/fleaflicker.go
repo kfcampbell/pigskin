@@ -14,6 +14,7 @@ const apiRoot = "https://www.fleaflicker.com/api/"
 // GetLeagueStandings gets the league of
 func GetLeagueStandings(leagueID string) error {
 	url := apiRoot + "FetchLeagueStandings" + getFiltering(leagueID)
+	fmt.Printf("url: %v\n", url)
 	result, err := http.Get(url)
 	if err != nil {
 		return err
@@ -27,6 +28,7 @@ func GetLeagueStandings(leagueID string) error {
 func GetLeagueScoreboard(leagueID string) (*responses.LeagueScoreboard, error) {
 	response := &responses.LeagueScoreboard{}
 	url := apiRoot + "FetchLeagueScoreboard" + getFiltering(leagueID)
+	fmt.Printf("url: %v\n", url)
 	res, err := http.Get(url)
 	if err != nil {
 		return response, err
@@ -40,6 +42,22 @@ func GetLeagueScoreboard(leagueID string) (*responses.LeagueScoreboard, error) {
 	}
 
 	return response, nil
+}
+
+// GetLeagueBoxscore returns a boxscore from a given game
+func GetLeagueBoxscore(leagueID string, fantasyGameID string) (string, error) {
+	url := apiRoot + "FetchLeagueBoxscore" + getBoxScoreFiltering(leagueID, fantasyGameID)
+	fmt.Printf("url: %v\n", url)
+	res, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	fmt.Printf("results: %v\n", res)
+	return url, nil
+}
+
+func getBoxScoreFiltering(leagueID string, fantasyGameID string) string {
+	return "?sport=NFL&league_id=" + fmt.Sprintf("%v", leagueID) + "&fantasy_game_id=" + fantasyGameID + "&scoring_period=0"
 }
 
 func getFiltering(leagueID string) string {

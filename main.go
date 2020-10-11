@@ -25,6 +25,9 @@ func realMain() error {
 		return fmt.Errorf("missing either LEAGUE_ID or GROUPME_CHAT_ID or GROUPME_API_KEY")
 	}
 
+	standings := fleaflicker.GetLeagueStandings(fleaflickerLeagueID)
+	fmt.Printf("standings: %v\n", standings)
+
 	scores, err := fleaflicker.GetLeagueScoreboard(fleaflickerLeagueID)
 	if err != nil {
 		return err
@@ -33,6 +36,12 @@ func realMain() error {
 	for i := 0; i < len(scores.Games); i++ {
 		score := utils.FormatScore(scores.Games[i])
 		fmt.Println(score)
+		fmt.Printf("game ID: %v\n", scores.Games[i].ID)
+		boxscore, err := fleaflicker.GetLeagueBoxscore(fleaflickerLeagueID, scores.Games[i].ID)
+		if err != nil {
+			return nil
+		}
+		fmt.Printf("boxscore: %v", boxscore)
 	}
 
 	biggestWin, difference := utils.GetBiggestWin(scores.Games)
