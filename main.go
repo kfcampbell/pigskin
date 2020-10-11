@@ -38,6 +38,9 @@ func realMain() error {
 	biggestWin := utils.GetBiggestWin(scores.Games)
 	fmt.Println(biggestWin)
 
+	closestGame := utils.GetClosestGame(scores.Games)
+	fmt.Println(closestGame)
+
 	topScorers, err := utils.GetTopScorers(scores.Games)
 	if err != nil {
 		return err

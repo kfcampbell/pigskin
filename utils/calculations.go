@@ -46,6 +46,24 @@ func GetBiggestWin(games []responses.FantasyGame) string {
 		biggestWin.Away.Name, biggestWin.Home.Name, biggestWin.AwayScore.Score.Value, biggestWin.HomeScore.Score.Value, difference)
 }
 
+// GetClosestGame returns the closest game in a slice of FantasyGames
+func GetClosestGame(games []responses.FantasyGame) string {
+	closestGame := games[0]
+	difference := GetDifferenceInScore(games[0])
+	for i := 1; i < len(games); i++ {
+		currDifference := GetDifferenceInScore(games[i])
+		if currDifference < difference {
+			difference = currDifference
+			closestGame = games[i]
+		}
+	}
+	if IsHomeWinning(closestGame) > 0 {
+		return fmt.Sprintf("- **Closest game**: _%v_ over %v, %v-%v (difference of %v points).", closestGame.Home.Name, closestGame.Away.Name, closestGame.HomeScore.Score.Value, closestGame.AwayScore.Score.Value, difference)
+	}
+
+	return fmt.Sprintf("- **Closest game**: _%v_ over %v, %v-%v (difference of %v points).", closestGame.Away.Name, closestGame.Home.Name, closestGame.AwayScore.Score.Value, closestGame.HomeScore.Score.Value, difference)
+}
+
 // GetTopScorers returns the topNScorers in a slice of FantasyGames
 func GetTopScorers(games []responses.FantasyGame) (string, error) {
 	topScorers, err := NewScorers(true, topNScorers)
