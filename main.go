@@ -33,6 +33,11 @@ func realMain() error {
 	for i := 0; i < len(scores.Games); i++ {
 		score := utils.FormatScore(scores.Games[i])
 		fmt.Println(score)
+		boxscore, err := fleaflicker.GetLeagueBoxscore(fleaflickerLeagueID, scores.Games[i].ID)
+		if err != nil {
+			return nil
+		}
+		fmt.Printf("home projected: %v, current: %v, optimum: %v\n", boxscore.PointsHome.Total.Projected.Formatted, boxscore.PointsHome.Total.Value.Formatted, boxscore.PointsHome.Total.Optimum.Formatted)
 	}
 
 	biggestWin, difference := utils.GetBiggestWin(scores.Games)
@@ -57,7 +62,7 @@ func realMain() error {
 	formattedBottomScorers := utils.FormatBottomScorers(bottomScorers)
 	fmt.Println(formattedBottomScorers)
 
-	body := fmt.Sprintf("%v\n%v\n%v\n", biggestWin, topScorers, bottomScorers)
+	body := fmt.Sprintf("%v\n%v\n%v\n%v\n", formattedBiggestWin, formattedTopScorers, formattedBottomScorers, formattedClosestGame)
 	fmt.Printf("body message: \n%v", body)
 
 	//err = groupme.PostMessage(body, groupmeChatID, groupmeAPIKey)
