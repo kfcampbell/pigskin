@@ -62,6 +62,105 @@ type FantasyLineScore struct {
 	ProjectedScore         FormattedDecimal `json:"projected"`
 }
 
+// LeagueBoxscore shows the actual, optimum, and projected scores for a given game
+type LeagueBoxscore struct {
+	Game       FantasyGame        `json:"game"`
+	Lineups    MatchupRosterGroup `json:"matchupRosterGroup"`
+	PointsAway MatchupTeamScore   `json:"pointsAway"`
+	PointsHome MatchupTeamScore   `json:"pointsHome"`
+	// one, two, skip a few
+	IsInProgress bool `json:"isInProgress"`
+}
+
+// MatchupRosterGroup represents the lineups in a fantasy game
+type MatchupRosterGroup struct {
+	Group string `json:"group"`
+}
+
+// MatchupTeamScore shows a team's score and their win probability
+type MatchupTeamScore struct {
+	Total               MatchupTeamSum `json:"total"`
+	ScoringPeriod       ScoringPeriod  `json:"scoringPeriod"`
+	WinProbability      float32        `json:"winProbability"`
+	IsWinProbabilitySet bool           `json:"isWinProbabilitySet"`
+}
+
+// MatchupTeamSum contains the team score, the optimum score, and the projected score.
+type MatchupTeamSum struct {
+	Value     FormattedDecimal `json:"value"`
+	Optimum   FormattedDecimal `json:"optimum"`
+	Projected FormattedDecimal `json:"projected"`
+	// Then the actual optimum lineup is stored here
+}
+
+// MatchupRosterSlot represents the slot for a player in a particular matchup
+type MatchupRosterSlot struct {
+	Position RosterPosition `json:"position"`
+}
+
+// ProPlayer represents a professional player
+type ProPlayer struct {
+	Sport           string  `json:"sport"`
+	ID              int32   `json:"id"`
+	FullName        string  `json:"nameFull"`
+	ShortName       string  `json:"nameShort"`
+	FirstName       string  `json:"nameFirst"`
+	LastName        string  `json:"nameLast"`
+	ProTeamAbbrev   string  `json:"proTeamAbbrevation"`
+	ProTeam         ProTeam `json:"proTeam"`
+	Position        string  `json:"position"`
+	HeadshotURL     string  `json:"headshotUrl"`
+	IsTeamAggregate bool    `json:"isTeamAggregate"`
+	NFLByeWeek      int32   `json:"nflByeWeek"`
+	Injury          Injury  `json:"injury"`
+}
+
+// Injury represent's a single ProPlayer's injury
+type Injury struct {
+	// LOL at this misspelling
+	TypeAbbreviation string `json:"typeAbbreviaition"`
+	Description      string `json:"description"`
+	Severity         string `json:"severity"`
+	FullType         string `json:"typeFull"`
+}
+
+// ProTeam represents a professional team
+type ProTeam struct {
+	Abbrev    string `json:"abbreviation"`
+	Location  string `json:"location"`
+	Name      string `json:"name"`
+	FreeAgent bool   `json:"is_free_agent"`
+}
+
+// RosterPosition represents a player's position on the roster
+type RosterPosition struct {
+	Label       string   `json:"label"`
+	Group       string   `json:"group"`
+	Eligibility []string `json:"eligibility"`
+	Min         int32    `json:"min"`
+	Max         int32    `json:"max"`
+	Start       int32    `json:"start"`
+	Colors      []string `json:"colors"`
+}
+
+// LeaguePlayer represents a player in a given week
+type LeaguePlayer struct {
+	ProPlayer ProPlayer `json:"proPlayer"`
+	// Bunch of super interesting player stats points stuff below here
+}
+
+// LeaguePlayerGame represents a player's in-game performance in a given week
+type LeaguePlayerGame struct {
+	Participant string        `json:"participant"` // HOME or AWAY
+	Period      ScoringPeriod `json:"scoringPeriod"`
+	Game        ProGame       `json:"proGame"`
+	// More stuff I'm lazy
+}
+
+// ProGame is a placeholder. i'm getting somewhat lazy
+type ProGame struct {
+}
+
 // FormattedDecimal is a lame way to format decimals
 type FormattedDecimal struct {
 	Value     float32 `json:"value"`

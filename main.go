@@ -25,9 +25,6 @@ func realMain() error {
 		return fmt.Errorf("missing either LEAGUE_ID or GROUPME_CHAT_ID or GROUPME_API_KEY")
 	}
 
-	standings := fleaflicker.GetLeagueStandings(fleaflickerLeagueID)
-	fmt.Printf("standings: %v\n", standings)
-
 	scores, err := fleaflicker.GetLeagueScoreboard(fleaflickerLeagueID)
 	if err != nil {
 		return err
@@ -36,12 +33,11 @@ func realMain() error {
 	for i := 0; i < len(scores.Games); i++ {
 		score := utils.FormatScore(scores.Games[i])
 		fmt.Println(score)
-		fmt.Printf("game ID: %v\n", scores.Games[i].ID)
 		boxscore, err := fleaflicker.GetLeagueBoxscore(fleaflickerLeagueID, scores.Games[i].ID)
 		if err != nil {
 			return nil
 		}
-		fmt.Printf("boxscore: %v", boxscore)
+		fmt.Printf("home projected: %v, current: %v, optimum: %v\n", boxscore.PointsHome.Total.Projected.Formatted, boxscore.PointsHome.Total.Value.Formatted, boxscore.PointsHome.Total.Optimum.Formatted)
 	}
 
 	biggestWin, difference := utils.GetBiggestWin(scores.Games)
@@ -66,7 +62,7 @@ func realMain() error {
 	formattedBottomScorers := utils.FormatBottomScorers(bottomScorers)
 	fmt.Println(formattedBottomScorers)
 
-	body := fmt.Sprintf("%v\n%v\n%v\n", biggestWin, topScorers, bottomScorers)
+	body := fmt.Sprintf("%v\n%v\n%v\n%v\n", formattedBiggestWin, formattedTopScorers, formattedBottomScorers, formattedClosestGame)
 	fmt.Printf("body message: \n%v", body)
 
 	//err = groupme.PostMessage(body, groupmeChatID, groupmeAPIKey)
