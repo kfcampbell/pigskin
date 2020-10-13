@@ -38,27 +38,23 @@ func realMain() error {
 
 	biggestWin, difference := utils.GetBiggestWin(scores.Games)
 	formattedBiggestWin := utils.FormatBiggestWin(biggestWin, difference)
-	fmt.Println(formattedBiggestWin)
 
 	closestGame, difference := utils.GetClosestGame(scores.Games)
 	formattedClosestGame := utils.FormatClosestGame(closestGame, difference)
-	fmt.Println(formattedClosestGame)
 
 	topScorers, err := utils.GetTopScorers(scores.Games)
 	if err != nil {
 		return err
 	}
 	formattedTopScorers := utils.FormatTopScorers(topScorers)
-	fmt.Println(formattedTopScorers)
 
 	bottomScorers, err := utils.GetBottomScorers(scores.Games)
 	if err != nil {
 		return err
 	}
 	formattedBottomScorers := utils.FormatBottomScorers(bottomScorers)
-	fmt.Println(formattedBottomScorers)
 
-	body := fmt.Sprintf("%v\n%v\n%v\n", biggestWin, topScorers, bottomScorers)
+	body := fmt.Sprintf("%v\n%v\n%v\n%v\n", formattedBiggestWin, formattedClosestGame, formattedTopScorers, formattedBottomScorers)
 	fmt.Printf("body message: \n%v", body)
 
 	err = groupme.PostMessage(body, groupmeChatID, groupmeAPIKey)
