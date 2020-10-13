@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/kfcampbell/pigskin/clients/fleaflicker"
+	"github.com/kfcampbell/pigskin/clients/groupme"
 	"github.com/kfcampbell/pigskin/utils"
 )
 
@@ -60,7 +61,7 @@ func realMain() error {
 	body := fmt.Sprintf("%v\n%v\n%v\n", biggestWin, topScorers, bottomScorers)
 	fmt.Printf("body message: \n%v", body)
 
-	//err = groupme.PostMessage(body, groupmeChatID, groupmeAPIKey)
+	err = groupme.PostMessage(body, groupmeChatID, groupmeAPIKey)
 	if err != nil {
 		return err
 	}
