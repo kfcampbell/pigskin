@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/kfcampbell/pigskin/clients/fleaflicker"
+	"github.com/kfcampbell/pigskin/responses"
 	"github.com/kfcampbell/pigskin/utils"
 )
 
@@ -30,6 +31,8 @@ func realMain() error {
 		return err
 	}
 
+	boxscores := make([]responses.LeagueBoxscore, 0)
+
 	for i := 0; i < len(scores.Games); i++ {
 		score := utils.FormatScore(scores.Games[i])
 		fmt.Println(score)
@@ -37,6 +40,7 @@ func realMain() error {
 		if err != nil {
 			return nil
 		}
+		boxscores = append(boxscores, *boxscore)
 		fmt.Printf("home projected: %v, current: %v, optimum: %v\n", boxscore.PointsHome.Total.Projected.Formatted, boxscore.PointsHome.Total.Value.Formatted, boxscore.PointsHome.Total.Optimum.Formatted)
 	}
 

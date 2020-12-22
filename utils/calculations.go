@@ -80,30 +80,17 @@ func GetBottomScorers(games []responses.FantasyGame) (*Scorers, error) {
 	return bottomScorers, nil
 }
 
-/*
-// GetBestManager returns the best manager from a slice of FantasyGames
-func GetBestManager(games []responses.FantasyGame) (responses.Team, responses.FantasyGame) {
-	team := &responses.Team{}
-	game := games[0]
-	if IsHomeWinning(games[0]) > {
-		team := games[0].Home
-	} else {
-		team := games[0].Away
+func GetBestManager(boxscores []responses.LeagueBoxscore) {
+	bestManagers, err := NewScorers()
+}
+
+// GetManagerDifference returns the difference between a manager's optimum and actual points
+func GetManagerDifference(boxscore responses.LeagueBoxscore, home bool) float32 {
+	if home {
+		return boxscore.PointsHome.Total.Optimum.Value - boxscore.PointsHome.Total.Value.Value
 	}
-
-	return nil, nil
+	return boxscore.PointsAway.Total.Optimum.Value - boxscore.PointsAway.Total.Value.Value
 }
-
-func GetManagerDifference(game responses.FantasyGame, teamId int) float32 {
-
-}
-
-func getAbsoluteManagerDifference(game responses.FantasyGame, teamId int) float32 {
-	if game.Home.ID == teamId {
-		if game.HomeScore.ProjectedScore.
-	}
-}
-*/
 
 // IsHomeWinning returns 1 if true, -1 if false, and 0 if tied
 func IsHomeWinning(game responses.FantasyGame) int {
