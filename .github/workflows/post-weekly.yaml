@@ -1,21 +1,21 @@
-name: post-weekly
-on:
-  schedule:
-    - cron: '0 5 * * 2' # run at 5:00am UTC time every tuesday, which is roughly 10pm every monday pacific
-    # - cron: '0 5 * * 3' # NFL players and coaches need to stop getting the virus
-  workflow_dispatch:
-    inputs:
-      tags:
-        description: 'Test scenario tags'  
-jobs:
-  post-weekly:
-    name: Run application
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build base container
-        run: go run main.go
-        env:
-          LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
-          GROUPME_CHAT_ID: ${{ secrets.GROUPME_CHAT_ID }}
-          GROUPME_API_KEY: ${{ secrets.GROUPME_API_KEY }}
+# name: post-weekly
+# on:
+#   schedule:
+#     - cron: '0 5 * * 2' # run at 5:00am UTC time every tuesday, which is roughly 10pm every monday pacific
+#     # - cron: '0 5 * * 3' # NFL players and coaches need to stop getting the virus
+#   workflow_dispatch:
+#     inputs:
+#       tags:
+#         description: 'Test scenario tags'
+# jobs:
+#   post-weekly:
+#     name: Run application
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Build base container
+#         run: go run main.go
+#         env:
+#           LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
+#           GROUPME_CHAT_ID: ${{ secrets.GROUPME_CHAT_ID }}
+#           GROUPME_API_KEY: ${{ secrets.GROUPME_API_KEY }}
